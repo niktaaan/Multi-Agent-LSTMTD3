@@ -13,6 +13,14 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
 2.simple_spread_v3  
 3.simple_speaker_listener_v4  
 
+  main.py  
+  File for running the training algorithm, and the rendering from the command-line.  
+
+  ma_algorithm_runner.py  
+  This module containing the AlgorithmRunner class, a high level class that organizes the algorithms, environments, and data logging.  
+
+  
+
 
 ## References
 A major code reference for the MADDPG Agents was as follows:
