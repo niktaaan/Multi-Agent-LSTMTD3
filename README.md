@@ -3,9 +3,9 @@ Python Code for MA-LSTMTD3 algorithm
 
 ## Description ( brief overview of the project and its purpose:summary of the associated paper its objectives and contributions)
 To run three deterministic algorithms for multi-agent reinforcement learning:<br>
-1.MA-DDPG
-2.MA-TD3
-3.MA-LSTMTD3
+1.MA-DDPG  
+2.MA-TD3  
+3.MA-LSTMTD3  
 For both Markov Decision Processes(MDP) and Partially Observable Markov Decision Processes (POMDP) versions of the tasks.
 The specific environments are the PettingZoo Multi-Particle Environments (MPE Environments):  
 1.simple_adversary_v3
