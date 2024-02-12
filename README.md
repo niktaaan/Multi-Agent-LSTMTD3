@@ -2,7 +2,7 @@
 Python Code for MA-LSTMTD3 algorithm 
 
 ## Description ( brief overview of the project and its purpose:summary of the associated paper its objectives and contributions)
-To run three deterministic algorithms for multi-agent reinforcement learning:  
+To run three deterministic algorithms for multi-agent reinforcement learning:<br>
 1.MA-DDPG
 2.MA-TD3
 3.MA-LSTMTD3
