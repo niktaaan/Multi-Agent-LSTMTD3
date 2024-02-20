@@ -22,7 +22,9 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
 
   create_algorithm.py
   Creates the appropriate multi-agent algorithm based on the provided arguments and hyperparameters.
-  
+
+  ma_ddpg.py
+  Wrapper class that coordinates agents in the multi-agent DDPG Algorithm.
 
 
 ## References
