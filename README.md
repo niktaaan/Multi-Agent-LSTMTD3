@@ -3,9 +3,9 @@ Python Code for MA-LSTMTD3 algorithm
 
 ## Description ( brief overview of the project and its purpose:summary of the associated paper its objectives and contributions)
 To run three deterministic algorithms for multi-agent reinforcement learning:  
-1.MA-DDPG  
-2.MA-TD3  
-3.MA-LSTMTD3  
+1.Multi-Agent Deep Deterministic Policy Gradient (MADDPG)  
+2.Multi-Agent Twin Delayed Deep Deterministic Policy Gradient (MATD3)  
+3.Multi-Agent Long Short-Term Memory Twin Delayed Deep Deterministic Policy Gradient (MALSTMTD3)  
 
 For both Markov Decision Processes(MDP) and Partially Observable Markov Decision Processes (POMDP) versions of the tasks.
 The specific environments are the PettingZoo Multi-Particle Environments (MPE Environments):  
@@ -14,7 +14,8 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
 3.simple_speaker_listener_v4  
 
   main.py  
-  File for running the training algorithm, and the rendering from the command-line.  
+  Script to train multi agent algorithm or render environment.
+  Arguments are parsed from the command line.
 
   ma_algorithm_runner.py  
   This module containing the AlgorithmRunner class, a high level class that organizes the algorithms, environments, and data logging.  
