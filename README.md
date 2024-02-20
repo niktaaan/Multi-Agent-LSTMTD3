@@ -20,6 +20,8 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
   ma_algorithm_runner.py  
   This module containing the AlgorithmRunner class, a high level class that organizes the algorithms, environments, and data logging.  
 
+  create_algorithm.py
+  Creates the appropriate multi-agent algorithm based on the provided arguments and hyperparameters.
   
 
 
