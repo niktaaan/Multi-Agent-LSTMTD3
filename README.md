@@ -26,6 +26,9 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
   ma_ddpg.py
   Wrapper class that coordinates agents in the multi-agent DDPG Algorithm.
 
+  agent_ddpg.py
+  The Deep Deterministic Policy Gradient (DDPG) agent required for MADDPG algorithm.
+
 
 ## References
 A major code reference for the MADDPG Agents was as follows:
