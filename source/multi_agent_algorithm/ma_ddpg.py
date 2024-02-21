@@ -1,3 +1,10 @@
+import os
+import torch
+import numpy as np
+from copy import deepcopy
+from source.multi_agent_algorithm.agent_ddpg import DDPG
+from source.multi_agent_algorithm.ma_replay_buffer import MultiAgentReplayBuffer
+
 class MADDPG:
     """
     A wrapper class that coordinates different agents in the Multi-agent Algorithm.
@@ -140,13 +147,7 @@ class MADDPG:
             next_observations: list[np.ndarray],  # agents could have different size observations
             terminations: list[np.ndarray]  # shape = (number_of_agents,)
     ):
-        """
-        Stores information from the environment and agents in the multi-agent replay buffer.
-
-        Takes information as numpy arrays and lists of numpy arrays,
-        converts to torch tensors,
-        and stores it in the multi-agent replay buffer.
-
+       
         Args:
             observations (list[np.ndarray]): A list of each agent's environment observations.
 
@@ -194,8 +195,6 @@ class MADDPG:
         """
         Each agent will perform an optimization/update/learning step.
         """
-        # make sure there are enough experiences stored in the replay buffer before learning
-        # there needs to be at least enough experiences for a batch before learning
         if self.ma_replay_buffer.ready():
             # each agent will sample experiences from the buffer and learn
             for index, agent in enumerate(self.agents):
