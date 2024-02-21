@@ -217,35 +217,6 @@ def choose_action(self, observation: torch.Tensor, evaluate: bool = False):
         observation indexing: [agent_index][batch sample, values]
         action indexing: [agent_index][batch sample, values]
 
-
-        Example:
-            >>> # creating a sample batch to concatenate
-            >>> observation_sizes = [2, 3, 3]  # sizes could be different for each agent
-            >>> action_sizes = [2, 2, 2]  # sizes could be different for each agent
-            >>> number_of_agents = 3
-            >>> batch_size = 5
-
-            >>> low = 0  # random int lower bound
-            >>> high = 10  # random int upper bound
-
-            >>> observations_batch = [torch.randint(low=low, high=high, size=(batch_size, size)) for size in observation_sizes]
-            >>> actions_batch = [torch.randint(low=low, high=high, size=(batch_size, size)) for size in action_sizes]
-
-            >>> print('observations batch:', observations_batch)
-            >>> print('actions batch:', actions_batch)
-
-            >>> # super tricky
-            >>> concatenated_observations_batch_tensor = torch.cat(observations_batch, dim=1)
-            >>> concatenated_actions_batch_tensor = torch.cat(actions_batch, dim=1)
-            >>> concatenated_critic_state_tensor = torch.cat([concatenated_observations_batch_tensor, concatenated_actions_batch_tensor], dim=1)
-
-            >>> # observations_batch[agent_number][sample_number]
-            >>> # actions_batch[agent_number][sample_number]
-            >>> print('concatenated observations batch =',  concatenated_observations_batch_tensor)
-            >>> print('concatenated actions batch =',  concatenated_actions_batch_tensor)
-            >>> print('state1 =', [observations_batch[x][0] for x in range(number_of_agents)], [actions_batch[x][0] for x in range(number_of_agents)])
-            >>> print(concatenated_critic_state_tensor)
-
         Args:
             observations_batch:
             actions_batch:
