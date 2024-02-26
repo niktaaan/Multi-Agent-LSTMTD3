@@ -1,5 +1,4 @@
 """
-Usage:
     Training An Algorithm From The Beginning (exclude --render and exclude --load_from_directory)
 
     $ python main.py [arguments]
@@ -61,9 +60,7 @@ from ma_algorithm_runner import AlgorithmRunner
 
 
 if __name__ == '__main__':
-    """ Run a multi-agent trial from the command-line using argparse to parse command-line arguments. """
-
-    """ Set up command-line argument parsing. """
+    
     # parser setup
     description = 'Runs a multi-agent reinforcement learning (MARL) algorithm.'
     parser = argparse.ArgumentParser(description=description)
@@ -72,7 +69,6 @@ if __name__ == '__main__':
     parser.add_argument('directory', type=str)
 
     # if --render is not included, then the value is False
-    #
     # if --render is set to be True, then the algorithm will be loaded from the directory and rendered
     # all other arguments will be ignored (N/A)
     parser.add_argument('--render', action='store_true')
@@ -81,14 +77,12 @@ if __name__ == '__main__':
     parser.add_argument('--load_from_directory', action='store_true')
     
     # Create an argument parser to accept POMDP and POMDP type as arguments
-    #scenarios are: 1- random_sensor_missing 2-random_noise( std=0.1) 3-random_noise( std=0.2)
-    
     parser.add_argument('--pomdp', action='store_true', help='enable POMDP')
     parser.add_argument('--pomdp_type', type=str, default='random_sensor_missing', help='Specify POMDP type')
 
     # environment, algorithm, training, and logging
     parser.add_argument('--algorithm_name', type=str, default='ma_ddpg')
-    parser.add_argument('--env_name', type=str, default='simple_adversary_v3')
+    parser.add_argument('--env_name', type=str, default='simple_spread_v3')
     parser.add_argument('--training_steps', type=int, default=1_000_000)
     parser.add_argument('--checkpoint_interval', type=int, default=5_000)
     parser.add_argument('--log_interval', type=int, default=10_000)
@@ -122,9 +116,6 @@ if __name__ == '__main__':
     # LSTM-TD3 relevant arguments
     parser.add_argument('--max_history_length', type=int, default=5)
     # Note (specifying the layers and layer sizes in the architecture):
-    # nargs="+" means 1 or more values can be specified (example: --critic_mem_lstm_hid_sizes 128 64 32)
-    # nargs="?" means 0 or 1 values can be specified (example: --actor_cur_feature_hid_sizes)
-    # nargs="*" means 0 or more values can be specified
     parser.add_argument('--critic_mem_pre_lstm_hid_sizes', type=int, nargs="+", default=[128])
     parser.add_argument('--critic_mem_lstm_hid_sizes', type=int, nargs="+", default=[128])
     parser.add_argument('--critic_mem_after_lstm_hid_size', type=int, nargs="+", default=[])
@@ -139,9 +130,7 @@ if __name__ == '__main__':
     # LSTM-TD3 relevant arguments
     parser.add_argument('--target_noise', type=float, default=0.1)
     parser.add_argument('--target_noise_clip', type=float, default=0.5)
-
     parser.add_argument('--save_replay_buffer', action='store_true')
-
 
     # parse the command-line arguments
     args = parser.parse_args()
@@ -176,11 +165,6 @@ if __name__ == '__main__':
     args.actor_post_comb_hid_sizes = convert_to_list(args.actor_post_comb_hid_sizes)
 
     """
-    Do one of 3 things based on the passed in arguments.
-    
-    1. Render an already trained algorithm. (--render)
-    2. Load and continue training an algorithm. (--load_from_directory)
-    3. Start training an algorithm from the beginning.
     """
     if args.render is True:
         print(f'... rendering ...')
