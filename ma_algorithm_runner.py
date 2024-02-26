@@ -11,13 +11,10 @@ from source.utility.dynamic_array import DynamicArray
 from source.utility.data_manager import DataManager
 
 class AlgorithmRunner:
-    """ A class that can train multi-agent algorithms (MADDPG, MATD3, MALSTMTD3) and render them. """
 
     def __init__(self, arguments: dict):
+        
         """
-        Initialization involves preparing the algorithm and environment for training.
-        If loading and continuing training from a directory, everything will also be set up here.
-
         Args:
             arguments (dict): A dictionary containing all the arguments necessary for training the algorithm.
         """
@@ -89,7 +86,6 @@ class AlgorithmRunner:
                 load_replay_buffer=False
             )
 
-        """ the data manager has all the utility functions for exporting data as plots and .csv files """
         self.data_manager = DataManager()
       
  def print_arguments(self):
@@ -158,7 +154,6 @@ class AlgorithmRunner:
             filename: str
     ):
         """
-        Load a Python dictionary from a human-readable JSON file.
 
         Args:
             directory (str): The directory to load the file from. Example >>> "./folder/path/"
@@ -218,9 +213,7 @@ class AlgorithmRunner:
         )
 
     def export_plot_and_csv(self):
-        """
-        Exports data as a plot and .csv file to the directory.
-        """
+
         print(f'--- Exporting Plot and CSV [{self.env_context["time_step_counter"]}] ---')
 
         # get the necessary data as local variables for convenience
@@ -279,22 +272,15 @@ class AlgorithmRunner:
         )
 
     def run_episode(self):
-        """
-        Runs an episode.
-        """
 
         # begin a new environment time step
         # while the current episode is not truncated or terminated (no agent has truncated/terminated)
         while not any(self.env_context['done']):
-            # each agent chooses an action given their current states in parallel
-            # at the beginning of trials, agents take random actions for state space exploration
             if self.env_context['time_step_counter'] < self.arguments['start_steps']:
-                # random actions sampled from the agents' action spaces
                 actions = {
                     agent: self.env_context['env'].action_space(agent).sample() for agent in self.env_context['env'].agents
                 }
             else:
-                # actions from the agents' policies
                 if self.arguments['algorithm_name'] == 'ma_lstm_td3':
                     # ma_lstm_td3 expects a list of np.ndarray
                     actions = self.algorithm.choose_action(
@@ -375,26 +361,16 @@ class AlgorithmRunner:
 
 def evaluate_algorithm(self) -> np.ndarray:
         """
-        The multi-agent algorithm's performance is evaluated.
-        During evaluation, no noise is added to the agents' actions.
-        Noise is only added during training for state space exploration.
-
         Returns:
             Returns a np.ndarray of scores for each agent.
             Example: 3 agents will return a numpy array of shape (3) with each of their average scores for the episodes
         """
-        # a deepcopy of the environment is created so that the original environment,
-        # which is still being used for training,
-        # is unaffected
         evaluation_env = deepcopy(self.env_context['env'])
         _, _ = evaluation_env.reset()
         number_of_agents: int = evaluation_env.max_num_agents
-
-        # the number of evaluation episodes to run and storage for the agents' scores
         evaluation_episodes: int = self.arguments['evaluation_episodes']
         evaluation_scores = np.zeros([evaluation_episodes, number_of_agents], dtype=float)
 
-        # loop over the episodes and test the algorithm
         for i in range(evaluation_episodes):
             # reset the environment for a new episode
             observations_dictionary, _ = evaluation_env.reset()
@@ -455,7 +431,6 @@ def evaluate_algorithm(self) -> np.ndarray:
   
  def train_algorithm(self):
 
-        """ print out some important information before the training begins (sanity check) """
         self.print_arguments()
         if self.load_from_directory is True:
             self.print_basic_info()
