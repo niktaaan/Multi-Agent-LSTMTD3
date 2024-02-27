@@ -1,10 +1,12 @@
+
 from source.environment.create_environment import create_environment
 from source.multi_agent_algorithm.ma_ddpg import MADDPG
 from source.multi_agent_algorithm.ma_td3 import MATD3
 from source.multi_agent_algorithm.ma_lstm_td3 import MALSTMTD3
 from source.environment.environment_wrapper import Environment_Wrapper
 
-ef create_algorithm(
+
+def create_algorithm(
         algorithm_name: str,
         env_name: str,
         arguments: dict,
@@ -23,6 +25,7 @@ ef create_algorithm(
     Returns:
         The appropriate multi-agent algorithm to run for the environment.
     """
+    
     env = create_environment(env_name=env_name, render=False)
     env.reset()
     if pomdp is True:
@@ -133,4 +136,3 @@ ef create_algorithm(
         raise ValueError(f"Error in create_algorithm. The algorithm name {algorithm_name} was not handled.")
 
     return algorithm
-
