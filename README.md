@@ -1,4 +1,4 @@
-# Multi-Agent-LSTMTD3
+# Multi-Agent LSTMTD3
 Python Code for MA-LSTMTD3 algorithm 
 
 ## Description ( brief overview of the project and its purpose:summary of the associated paper its objectives and contributions)
