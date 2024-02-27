@@ -1,7 +1,7 @@
 # Multi-Agent LSTMTD3
 Python Code for MA-LSTMTD3 algorithm 
 
-## Description ( brief overview of the project and its purpose:summary of the associated paper its objectives and contributions)
+## Description 
 To run three deterministic algorithms for multi-agent reinforcement learning:  
 1.Multi-Agent Deep Deterministic Policy Gradient (MADDPG)  
 2.Multi-Agent Twin Delayed Deep Deterministic Policy Gradient (MATD3)  
