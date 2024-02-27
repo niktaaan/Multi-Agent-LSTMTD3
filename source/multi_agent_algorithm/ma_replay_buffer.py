@@ -1,9 +1,10 @@
+
 import torch
 import numpy as np
 
 
 class MultiAgentReplayBuffer:
-
+  
     def __init__(
             self,
             number_of_agents: int,
@@ -24,6 +25,7 @@ class MultiAgentReplayBuffer:
 
             batch_size (int): The size of each batch for training.
 
+     
         """
         # save all the passed in argument values
         self.number_of_agents = number_of_agents
@@ -35,6 +37,7 @@ class MultiAgentReplayBuffer:
         # a counter for keeping track of how many transitions/experiences/memories are stored in the buffer
         self.memory_counter = 0
 
+        # actor transition/experience/memory storage
         # each list element (torch tensors) will store a different agent's experiences
         self.observation_memory = []
         self.action_memory = []
@@ -65,7 +68,7 @@ class MultiAgentReplayBuffer:
                 torch.zeros([self.buffer_size], dtype=torch.bool)
             )
 
-         def store_experience(
+    def store_experience(
             self,
             observations: list[np.ndarray],  # agents could have different size observations
             actions: list[np.ndarray],  # agents could have different size actions
@@ -74,7 +77,11 @@ class MultiAgentReplayBuffer:
             terminations: list[np.ndarray]  # shape = (number_of_agents,)
     ):
         """
-       
+        Stores information from the environment and agents in the multi-agent replay buffer.
+
+        Takes information as numpy arrays and lists of numpy arrays,
+        converts to torch tensors,
+        and stores it in the multi-agent replay buffer.
 
         Args:
             observations (list[np.ndarray]): A list of each agent's environment observations.
@@ -109,7 +116,8 @@ class MultiAgentReplayBuffer:
 
         # increment the memory counter
         self.memory_counter += 1
-         def sample_buffer(self):
+
+    def sample_buffer(self):
         """
         Uniformly sample a batch of the agents' memories from the buffer for training.
         """
