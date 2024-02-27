@@ -1,3 +1,4 @@
+
 import os
 from copy import deepcopy
 import torch
@@ -7,14 +8,16 @@ import pygame
 import time
 from source.multi_agent_algorithm.create_algorithm import create_algorithm
 from source.environment.create_environment import create_environment
+from source.environment.environment_wrapper import Environment_Wrapper
 from source.utility.dynamic_array import DynamicArray
 from source.utility.data_manager import DataManager
+
 
 class AlgorithmRunner:
 
     def __init__(self, arguments: dict):
-        
         """
+
         Args:
             arguments (dict): A dictionary containing all the arguments necessary for training the algorithm.
         """
@@ -28,22 +31,42 @@ class AlgorithmRunner:
         self.render = arguments['render']
         self.load_from_directory = arguments['load_from_directory']
         self.directory = arguments['directory']
-          """ Save arguments to a file (if not rendering or loading from the directory) """
+        self.pomdp=arguments['pomdp']
+        self.pomdp_type=arguments['pomdp_type']
+
+        # loading or storing arguments
+        if (self.load_from_directory is True) or (self.render is True):
+            self.arguments = AlgorithmRunner.load_dictionary_from_json_file(directory=arguments['directory'], filename='arguments.json')
+        else:
+            self.arguments = arguments
+
+        # since the loaded arguments might have different flag values from a previous run
+        self.arguments['render'] = self.render
+        self.arguments['load_from_directory'] = self.load_from_directory
+        self.arguments['directory'] = self.directory
+        self.arguments['pomdp']=self.pomdp
+        self.arguments['pomdp_type']=self.pomdp_type
+        
+        """ Save arguments to a file (if not rendering or loading from the directory) """
         if (not self.load_from_directory) and (not self.render):
             AlgorithmRunner.save_dictionary_to_json_file(
                 directory=self.arguments['directory'],
                 filename='arguments.json',
                 dictionary=self.arguments
             )
-            """
+
+        """
         If loading and continuing training from a directory,
         load the previous environment context,
         else create a new environment context.
-         """
+
+        """
         if self.load_from_directory is True:
             self.env_context = torch.load(f=os.path.join(self.arguments['directory'], 'checkpoint/', 'env_context.pt'))
         else:
             env = create_environment(env_name=self.arguments['env_name'])
+            if self.pomdp is True:
+               env=Environment_Wrapper(env, self.pomdp_type)
             self.env_context = {
                 'env': env,
                 'time_step_counter': 0,
@@ -59,7 +82,8 @@ class AlgorithmRunner:
                 'terminations_list': [],
                 'done': [False] * env.max_num_agents
             }
-                """
+
+        """
         Create the algorithm.
         
         Load the trained algorithm from the checkpoint directory if,
@@ -86,15 +110,19 @@ class AlgorithmRunner:
                 load_replay_buffer=False
             )
 
+        """ the data manager has all the utility functions for exporting data as plots and .csv files """
         self.data_manager = DataManager()
-      
- def print_arguments(self):
+
+    def print_arguments(self):
+
         print()
         print('--- Arguments ---')
         for key, value in self.arguments.items():
             print(f'{key}: {value}')
         print()
- def print_basic_info(self):
+
+    def print_basic_info(self):
+       
         basic_info: dict = AlgorithmRunner.load_dictionary_from_json_file(
             directory=os.path.join(self.arguments['directory'], 'checkpoint/'),
             filename='basic_info.json'
@@ -105,7 +133,12 @@ class AlgorithmRunner:
         for key, value in basic_info.items():
             print(f'{key}: {value}')
         print()
-  def print_env_context(self):
+
+    def print_env_context(self):
+        """
+        Prints information about the environment context.
+        Useful for a basic sanity check when starting training or continuing training from a directory.
+        """
         excluded_keys = ['observations_list', 'actions_list', 'rewards_list', 'next_observations_list']
         print()
         print('--- Environment Context ---')
@@ -122,7 +155,7 @@ class AlgorithmRunner:
             else:
                 pass
         print()
-    
+
     @staticmethod
     def save_dictionary_to_json_file(
             directory: str,
@@ -130,12 +163,11 @@ class AlgorithmRunner:
             dictionary: dict
     ):
         """
-        Save a Python dictionary to a file as human-readable JSON.
 
         Args:
-            directory (str): The directory to save the file to.
+            directory (str): The directory to save the file to. Example >>> "./folder/path/"
 
-            filename (str): The name to give the file. 
+            filename (str): The name to give the file. Example >>> "human_readable_json.txt" or "filename.json"
 
             dictionary (dict): The Python dictionary to save as human-readable JSON.
         """
@@ -174,7 +206,7 @@ class AlgorithmRunner:
     def numpy_to_tensor_list(numpy_list: list[np.ndarray], dtype=torch.float) -> list[torch.Tensor]:
         """ Converts a list of numpy arrays into a list of torch tensors, and returns the tensor list. """
         return [torch.tensor(numpy_array, dtype=dtype) for numpy_array in numpy_list]
-      
+
     def save_checkpoint(self):
         """
         Save all the necessary information for continuing the training to the checkpoint directory.
@@ -276,11 +308,15 @@ class AlgorithmRunner:
         # begin a new environment time step
         # while the current episode is not truncated or terminated (no agent has truncated/terminated)
         while not any(self.env_context['done']):
+            # each agent chooses an action given their current states in parallel
+            # at the beginning of trials, agents take random actions for state space exploration
             if self.env_context['time_step_counter'] < self.arguments['start_steps']:
+                # random actions sampled from the agents' action spaces
                 actions = {
                     agent: self.env_context['env'].action_space(agent).sample() for agent in self.env_context['env'].agents
                 }
             else:
+                # actions from the agents' policies
                 if self.arguments['algorithm_name'] == 'ma_lstm_td3':
                     # ma_lstm_td3 expects a list of np.ndarray
                     actions = self.algorithm.choose_action(
@@ -356,21 +392,24 @@ class AlgorithmRunner:
 
             """ save the parameters to a directory at intervals """
             if self.env_context['time_step_counter'] % self.arguments['checkpoint_interval'] == 0:
+                # don't waste time saving checkpoints until after the random agent actions (start steps) finishes
                 if self.env_context['time_step_counter'] >= self.arguments['start_steps']:
                     self.save_checkpoint()
 
-def evaluate_algorithm(self) -> np.ndarray:
-        """
-        Returns:
-            Returns a np.ndarray of scores for each agent.
-            Example: 3 agents will return a numpy array of shape (3) with each of their average scores for the episodes
-        """
+    def evaluate_algorithm(self) -> np.ndarray:
+       
+        # a deepcopy of the environment is created so that the original environment,
+        # which is still being used for training,
+        # is unaffected
         evaluation_env = deepcopy(self.env_context['env'])
         _, _ = evaluation_env.reset()
         number_of_agents: int = evaluation_env.max_num_agents
+
+        # the number of evaluation episodes to run and storage for the agents' scores
         evaluation_episodes: int = self.arguments['evaluation_episodes']
         evaluation_scores = np.zeros([evaluation_episodes, number_of_agents], dtype=float)
 
+        # loop over the episodes and test the algorithm
         for i in range(evaluation_episodes):
             # reset the environment for a new episode
             observations_dictionary, _ = evaluation_env.reset()
@@ -428,9 +467,9 @@ def evaluate_algorithm(self) -> np.ndarray:
         average_score = np.mean(evaluation_scores, axis=0)
 
         return average_score
-  
- def train_algorithm(self):
 
+    def train_algorithm(self):
+        
         self.print_arguments()
         if self.load_from_directory is True:
             self.print_basic_info()
@@ -449,7 +488,7 @@ def evaluate_algorithm(self) -> np.ndarray:
             self.env_context['evaluation_time_steps'].append(0)
 
         """ run the environment episode loop for training """
-        # counters for the time steps and episodes elapsed
+
         if self.load_from_directory is False:
             self.env_context['time_step_counter'] = 0
             self.env_context['episode_counter'] = 0
@@ -497,6 +536,7 @@ def evaluate_algorithm(self) -> np.ndarray:
 
                 if self.arguments['algorithm_name'] == 'ma_lstm_td3':
                     self.algorithm.episode_reset(starting_observations=deepcopy(self.env_context['observations_list']))
+
     def render_algorithm(self):
         """ Calling this function will render the algorithm in the environment for visualization. """
 
@@ -560,10 +600,3 @@ def evaluate_algorithm(self) -> np.ndarray:
 
 if __name__ == '__main__':
     pass
-
-
-
-
-
-
-
