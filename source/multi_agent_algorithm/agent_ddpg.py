@@ -1,3 +1,4 @@
+
 import os
 from copy import deepcopy
 import torch
@@ -5,7 +6,9 @@ import numpy as np
 from source.multi_agent_algorithm.critic_network import CriticNetwork
 from source.multi_agent_algorithm.actor_network import ActorNetwork
 
+
 class DDPG:
+   
     def __init__(
             self,
             name: str,
@@ -24,7 +27,7 @@ class DDPG:
             discount_factor: float = 0.95,
             tau: float = 0.01
     ):
- """
+        """
         Args:
             name (str): A name given to the agent.
 
@@ -80,6 +83,7 @@ class DDPG:
             'target_actor': 'target_actor.pt',
             'target_critic': 'target_critic.pt',
         }
+
         # create the online actor and critic networks
         self.actor = ActorNetwork(
             learning_rate=actor_learning_rate,
@@ -98,7 +102,6 @@ class DDPG:
         )
 
         # create the target actor and critic networks
-        # note:
         # deepcopy() will also ensure that the weights are the same for the target networks
         self.target_actor = deepcopy(self.actor)
         self.target_critic = deepcopy(self.critic)
@@ -112,6 +115,7 @@ class DDPG:
 
         # report that the agent was successfully created
         print(f'... DDPG Agent "{self.name}" Created Successfully ...')
+
     def update_parameters(self, tau: float):
         """
         Updates the target network weights by a certain amount of the online network weights.
@@ -128,7 +132,8 @@ class DDPG:
         for critic_parameter, target_critic_parameter in zip(self.critic.parameters(), self.target_critic.parameters()):
             # overwrites the target network parameters with the following weighted sum
             target_critic_parameter.data.copy_(tau * critic_parameter.data + (1 - tau) * target_critic_parameter.data)
-def choose_action(self, observation: torch.Tensor, evaluate: bool = False):
+
+    def choose_action(self, observation: torch.Tensor, evaluate: bool = False):
         """
         Given the environment state, the agent chooses an action from its policy.
 
@@ -163,7 +168,8 @@ def choose_action(self, observation: torch.Tensor, evaluate: bool = False):
         # print('action', action)
         # print('conversion', action.data.cpu().numpy())
         return action.cpu().detach().numpy()
-      def save_parameters(self, directory: str):
+
+    def save_parameters(self, directory: str):
         """
         Saves all the network parameters to files in the directory.
         """
@@ -217,6 +223,7 @@ def choose_action(self, observation: torch.Tensor, evaluate: bool = False):
         observation indexing: [agent_index][batch sample, values]
         action indexing: [agent_index][batch sample, values]
 
+
         Args:
             observations_batch:
             actions_batch:
@@ -229,7 +236,7 @@ def choose_action(self, observation: torch.Tensor, evaluate: bool = False):
             dim=1
         )
         return critic_state_batch
-      
+
     def learn(
             self,
             agent_list,
