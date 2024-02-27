@@ -1,3 +1,4 @@
+
 import os
 import torch
 import numpy as np
@@ -5,18 +6,9 @@ from copy import deepcopy
 from source.multi_agent_algorithm.agent_ddpg import DDPG
 from source.multi_agent_algorithm.ma_replay_buffer import MultiAgentReplayBuffer
 
+
 class MADDPG:
-    """
-    A wrapper class that coordinates different agents in the Multi-agent Algorithm.
-    This is a version of the MADDPG algorithm.
-
-    This class should coordinate,
-
-    1. All agents
-    2. Agent actions
-    3. Experience replay buffer
-    4. Saving/Loading agent parameters and replay buffer states from checkpoint files
-    """
+   
     def __init__(
             self,
             number_of_agents: int,
@@ -112,6 +104,7 @@ class MADDPG:
                     tau=tau
                 )
             )
+
     def save_checkpoint(self, directory: str, save_replay_buffer: bool = True):
         """ Saves each agent's neural network weights to the directory. Saves the replay buffer. """
         # create the directories and save the parameters
@@ -147,7 +140,9 @@ class MADDPG:
             next_observations: list[np.ndarray],  # agents could have different size observations
             terminations: list[np.ndarray]  # shape = (number_of_agents,)
     ):
-       
+        """
+        Stores information from the environment and agents in the multi-agent replay buffer.
+
         Args:
             observations (list[np.ndarray]): A list of each agent's environment observations.
 
@@ -195,6 +190,8 @@ class MADDPG:
         """
         Each agent will perform an optimization/update/learning step.
         """
+        # make sure there are enough experiences stored in the replay buffer before learning
+        # there needs to be at least enough experiences for a batch before learning
         if self.ma_replay_buffer.ready():
             # each agent will sample experiences from the buffer and learn
             for index, agent in enumerate(self.agents):
@@ -208,4 +205,3 @@ class MADDPG:
                     next_observations=next_observations,
                     terminations=terminations
                 )
-
