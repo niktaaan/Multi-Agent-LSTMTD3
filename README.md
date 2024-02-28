@@ -29,6 +29,8 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
   agent_ddpg.py  
   The Deep Deterministic Policy Gradient (DDPG) agent required for MADDPG algorithm.
 
+## Code Contributors  
+The initial version of the code was written by Jordan Cramer. Subsequent modifications were made by Maryam Kia.  
 
 ## References
 A major code reference for the MADDPG Agents was as follows:
