@@ -1,5 +1,5 @@
 # Multi-Agent LSTMTD3
-Python Code for MA-LSTMTD3 algorithm 
+Python Code for MA-LSTMTD3 algorithm developed for paper : " Memory Augmented Multi-Agent Reinforcement Learning for Cooperative Environment"
 
 ## Description 
 To run three deterministic algorithms for multi-agent reinforcement learning:  
