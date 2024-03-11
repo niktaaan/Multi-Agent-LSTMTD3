@@ -21,7 +21,7 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
   create_algorithm.py
   Creates the appropriate multi-agent algorithm based on the provided arguments and hyperparameters.
 
-##Run
+##Run  
 Train an algorithm from the beginning (exclude --render and exclude --load_from_directory) from the command line with:
 $ python main.py [arguments]
 
