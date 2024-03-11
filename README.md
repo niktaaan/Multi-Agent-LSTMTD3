@@ -8,10 +8,8 @@ To run three deterministic algorithms for multi-agent reinforcement learning:
 3.Multi-Agent Long Short-Term Memory Twin Delayed Deep Deterministic Policy Gradient (MALSTMTD3)  
 
 For both Markov Decision Processes(MDP) and Partially Observable Markov Decision Processes (POMDP) versions of the tasks.
-The specific environments are the PettingZoo Multi-Particle Environments (MPE Environments):  
-1.simple_adversary_v3  
-2.simple_spread_v3  
-3.simple_speaker_listener_v4  
+The specific environments are the PettingZoo Multi-Particle Environments (MPE Environments).
+
 
   main.py  
   Script to train multi agent algorithm or render environment.
