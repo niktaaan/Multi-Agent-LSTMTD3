@@ -21,11 +21,11 @@ The specific environments are the PettingZoo Multi-Particle Environments (MPE En
   create_algorithm.py
   Creates the appropriate multi-agent algorithm based on the provided arguments and hyperparameters.
 
-  ma_ddpg.py  
-  Wrapper class that coordinates agents in the multi-agent DDPG Algorithm.
+##Run
+Train an algorithm from the beginning (exclude --render and exclude --load_from_directory) from the command line with:
+$ python main.py [arguments]
 
-  agent_ddpg.py  
-  The Deep Deterministic Policy Gradient (DDPG) agent required for MADDPG algorithm.
+
 
 ## Code Contributors  
 The initial version of the code was written by Jordan Cramer. Subsequent modifications were made by Maryam Kia.  
