@@ -15,7 +15,7 @@ To train an algorithm from scratch (excluding rendering and loading from directo
 python main.py [arguments]
 
 ## Code Contributors  
-The initial version of the code was written by Jordan Cramer. Subsequent modifications were made by Maryam Kia.  
+Based on an initial implementation by Jordan Cramer. Maryam Kia extended the code to the full experiments.
 
 ## References
 A major code reference for the MADDPG Agents was as follows:
