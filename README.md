@@ -1,5 +1,6 @@
 # Multi-Agent LSTMTD3
 Python Code for the MA-LSTMTD3 algorithm developed for the paper : " Memory Augmented Multi-Agent Reinforcement Learning for Cooperative Environment"
+https://link.springer.com/chapter/10.1007/978-3-031-81596-6_8
 
 ## Description 
 To run three deterministic algorithms for multi-agent reinforcement learning:  
@@ -12,7 +13,7 @@ These algorithms are designed to work with both Markov Decision Processes (MDP) 
 ## Running the Code
 
 To train an algorithm from scratch (excluding rendering and loading from directory), run the following command from the command line:
-python main.py [arguments]
+python main.py runs/simple_spread_lstm --algorithm_name ma_lstm_td3 --env_name simple_spread_v3
 
 ## Code Contributors  
 Based on an initial implementation by Jordan Cramer. Maryam Kia extended the code to the full experiments.
